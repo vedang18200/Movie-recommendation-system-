@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4 text-center">
+                <i class="bi bi-star-fill text-warning me-2"></i> Your Movie Recommendations
+            </h2>
+            
+            <div class="mb-4 text-center">
+                <p class="lead">Based on your selected genres:
+                    {% for genre in selected_genres %}
+                        <span class="badge bg-primary me-1">{{ genre.name }}</span>
+                    {% endfor %}
+                </p>
+                <a href="{% url 'select_genres' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-pencil"></i> Change Preferences
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% if movies %}
+            {% for movie in movies %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 movie-card shadow-sm">
+                    {% if movie.poster_path != 'N/A' %}
+                        <img src="{{ movie.poster_path }}" class="card-img-top" alt="{{ movie.title }}">
+                    {% else %}
+                        <div class="bg-light text-center p-3">
+                            <i class="bi bi-film text-primary" style="font-size: 3rem;"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ movie.title }}</h5>
+                        <div class="mb-2">
+                            <span class="badge bg-warning text-dark">★ {{ movie.rating }}</span>
+                            <small class="text-muted">{{ movie.genre }}</small>
+                        </div>
+                        <p class="card-text">{{ movie.description|truncatewords:25 }}</p>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <small class="text-muted">Released: {{ movie.release_year }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center">
+                <div class="alert alert-info p-5">
+                    <i class="bi bi-info-circle me-2" style="font-size: 2rem;"></i>
+                    <h4>No movies found matching your selected genres</h4>
+                    <p class="mb-0">Try selecting different genres for recommendations</p>
+                    <a href="{% url 'select_genres' %}" class="btn btn-primary mt-3">Adjust Genre Selections</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+    .movie-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeIn 0.5s ease-out;
+        animation-fill-mode: both;
+    }
+    
+    .movie-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    
+    .card-img-top {
+        height: 400px;
+        object-fit: cover;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .card:nth-child(3n+1) { animation-delay: 0.1s; }
+    .card:nth-child(3n+2) { animation-delay: 0.2s; }
+    .card:nth-child(3n+3) { animation-delay: 0.3s; }
+</style>
+{% endblock %}
