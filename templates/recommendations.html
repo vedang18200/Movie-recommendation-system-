@@ -25,13 +25,12 @@
             {% for movie in movies %}
             <div class="col-md-4 mb-4">
                 <div class="card h-100 movie-card shadow-sm">
-                    {% if movie.poster_path != 'N/A' %}
+                    {% if movie.poster_path and movie.poster_path != 'N/A' %}
                         <img src="{{ movie.poster_path }}" class="card-img-top" alt="{{ movie.title }}">
                     {% else %}
-                        <div class="bg-light text-center p-3">
-                            <i class="bi bi-film text-primary" style="font-size: 3rem;"></i>
-                        </div>
+                        <img src="https://via.placeholder.com/300x450?text=No+Image" class="card-img-top" alt="No poster available">
                     {% endif %}
+                
                     <div class="card-body">
                         <h5 class="card-title">{{ movie.title }}</h5>
                         <div class="mb-2">
@@ -43,7 +42,7 @@
                     <div class="card-footer bg-white">
                         <small class="text-muted">Released: {{ movie.release_year }}</small>
                     </div>
-                </div>
+                </div>~                
             </div>
             {% endfor %}
         {% else %}
