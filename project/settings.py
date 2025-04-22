@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'app',
 ]
 
@@ -115,13 +116,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static'] 
+import os
 
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL='landing_page'
-OMDB_API_KEY = "6e5e1e84"
+TMDB_API_KEY = '073988d015c80aad628573a7de0314d5'
+TMDB_ACCESS_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNzM5ODhkMDE1YzgwYWFkNjI4NTczYTdkZTAzMTRkNSIsIm5iZiI6MTc0NTMwNjM1NS43Mjg5OTk5LCJzdWIiOiI2ODA3NDJmMzZlMWE3NjllODFlZThkNDIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.Pi2Yt4wvqES2gRPu6KKUMWwsESPcVHLqjC_j8s0Kc9U'
+
