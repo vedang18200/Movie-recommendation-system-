@@ -3,21 +3,37 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow p-5 rounded text-center">
-                <h2 class="mb-4">
-                    Hello, <span class="fw-bold">{{ user.username }}</span> <span style="animation: wave 1s ease-in-out infinite alternate;">👋</span>
+            <div class="card shadow p-5 rounded text-center" style="background-color: #343a40; color: #f8f9fa; border: 1px solid #495057;">
+                <h2 class="mb-3" style="color: #00bfff;">
+                    <i class="bi bi-person-check-fill me-2"></i> Welcome, <span class="fw-bold">{{ user.username }}</span>!
                 </h2>
-                <p class="lead mb-4">
-                    Let's tailor your movie experience! Tell us what you love to watch.
+                <p class="lead mb-4" style="color: #f8f9fa;">
+                    Embark on a personalized cinematic journey. Tell us what excites you!
                 </p>
                 <div class="d-grid gap-3">
-                    <a href="{% url 'select_genres' %}" class="btn btn-info btn-lg rounded-pill">
-                        <i class="bi bi-list-stars me-2"></i> Choose Your Genres
-                    </a>
-                    <a href="{% url 'recommend_movies' %}" class="btn btn-success btn-lg rounded-pill">
-                        <i class="bi bi-film me-2"></i> See Recommendations
+                    <a href="{% url 'select_genres' %}" class="btn btn-outline-info btn-lg rounded-pill">
+                        <i class="bi bi-list-stars me-2"></i> Discover by Genres
                     </a>
                 </div>
+                <hr class="my-4" style="border-top: 1px solid #6c757d;">
+                <p class="small text-secondary">
+                    Selecting your favorite genres will help us fine-tune your movie suggestions.
+                </p>
+            </div>
+
+            <div class="card shadow p-4 mt-4 rounded" style="background-color: #212529; color: #f8f9fa; border: 1px solid #495057;">
+                <h3 class="mb-3 text-center text-info"><i class="bi bi-robot me-2"></i> About Our Recommendations</h3>
+                <p class="lead text-light">
+                    Our movie recommendation system utilizes a powerful <strong>Support Vector Machine (SVM)</strong> model to predict movies you might enjoy.
+                </p>
+                <p class="text-light">
+                    Trained on a carefully curated dataset, our SVM model analyzes patterns in movie preferences and characteristics to provide personalized suggestions.
+                    We've achieved an impressive <strong>accuracy of 93%</strong> in our evaluations, ensuring that you receive relevant and exciting movie recommendations.
+                </p>
+                <p class="text-light">
+                    The data that powers our model is sourced from a publicly available and extensive movie dataset on <strong>Kaggle</strong>, a platform for data science enthusiasts.
+                    This allows us to leverage a rich collection of user ratings and movie information to build a robust recommendation engine, all thanks to the collaborative spirit of the open-source data community.
+                </p>
             </div>
         </div>
     </div>
@@ -28,18 +44,57 @@
 {{ block.super }}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <style>
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .container {
+        flex-grow: 1;
+    }
+
     .card {
         animation: fadeInUp 0.6s ease-out;
+        /* Background and text color now set inline for the first card */
+        border: 1px solid #495057; /* Subtle dark border */
     }
 
-    @keyframes fadeInUp {
-        from { transform: translateY(20px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
+    .card h2 {
+        color: #00bfff; /* Accent color for the welcome heading */
     }
 
-    @keyframes wave {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(15deg); }
+    .btn-outline-info {
+        color: #00bfff;
+        border-color: #00bfff;
+    }
+
+    .btn-outline-info:hover {
+        background-color: #00bfff;
+        color: #212529; /* Dark text on hover */
+    }
+
+    /* Footer Styles */
+    .site-footer {
+        background-color: #212529;
+        color: #f8f9fa;
+        padding: 20px 0;
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .site-footer p {
+        margin-bottom: 0;
+        font-size: 0.9rem;
+    }
+
+    .site-footer a {
+        color: #00bfff;
+        text-decoration: none;
+    }
+
+    .site-footer a:hover {
+        text-decoration: underline;
     }
 </style>
 {% endblock %}
