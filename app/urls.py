@@ -10,4 +10,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page='landing_page'), name='logout'),
     path('genres/', views.select_genres, name='select_genres'),
     path('recommendations/', views.recommend_movies, name='recommend_movies'),
+    path('search_movie/', views.search_movie, name='search_movie'),
 ]

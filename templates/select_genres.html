@@ -1,9 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-5">
+    <!-- Search form - Outside the main form -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <form method="POST" action="{% url 'search_movie' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="text" class="form-control" name="movie_name" placeholder="Search for a movie..." required>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search <i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </form>
+            {% if error %}
+            <div class="alert alert-danger text-center mt-2" role="alert">
+                {{ error }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Main genre selection card - Keep as is -->
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow p-4 rounded dark-card"style="background-color: #212529;>
+            <div class="card shadow p-4 rounded dark-card" style="background-color: #212529;">
                 <div class="p-3 rounded" style="background-color: #212529;">
                     <h2 class="text-center mb-4 text-info">
                         <i class="bi bi-filter-fill me-2"></i> Explore Your Favorite Genres
@@ -31,7 +52,7 @@
                             <div class="alert alert-danger mt-3">{{ form.interested_genres.errors }}</div>
                         {% endif %}
                     </div>
-
+                    
                     <div class="d-grid gap-2">
                         <button class="btn btn-primary btn-lg" type="submit">
                             <i class="bi bi-check-circle-fill me-2"></i> Save Genre Preferences

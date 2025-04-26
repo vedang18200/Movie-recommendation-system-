@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile, Genre
 from django.contrib.auth import login, logout
-
+from django.contrib import messages  
 
 # Landing Page (Public)
 def landing_page(request):
@@ -19,21 +19,20 @@ def logout_view(request):
     logout(request)
     return redirect('landing_page')
 
+
 def signup_view(request):
     if request.method == 'POST':
         form = CustomSignupForm(request.POST)
         if form.is_valid():
-            # Create user but don't save yet
             user = form.save(commit=False)
-            # Set password manually since we're handling it in our custom form
             user.set_password(form.cleaned_data['password'])
-            # Now save the user
             user.save()
-            login(request, user)
-            return redirect('home_page')
+            messages.success(request, 'Registered successfully! Please log in.')
+            return redirect('login')  # Use the URL name for login page
     else:
         form = CustomSignupForm()
     return render(request, 'signup.html', {'form': form})
+
 
 # Home Page (After Login)
 @login_required
@@ -137,3 +136,48 @@ def recommend_movies(request):
         'selected_genres': selected_genres,
         'default_poster_url': default_poster_url  # Add this line
     })
+@login_required
+def search_movie(request):
+    default_poster_url = '/static/images/poster.png'
+    
+    if request.method == 'POST':
+        movie_name = request.POST.get('movie_name')
+        
+        # Search for movies that contain the search term (case insensitive)
+        matching_movies = Movie.objects.filter(title__icontains=movie_name)
+        
+        if matching_movies.exists():
+            # Get the first match as our selected movie
+            selected_movie = matching_movies.first()
+            
+            # Get the genres of the selected movie
+            movie_genres = selected_movie.genres.all()
+            
+            # Find similar movies based on shared genres, excluding the selected movie
+            similar_movies = Movie.objects.filter(
+                genres__in=movie_genres
+            ).exclude(
+                id=selected_movie.id
+            ).distinct()
+            
+            # Sort by vote average (highest first) and limit to 6 recommendations
+            recommended_movies = similar_movies.order_by('-vote_average')[:6]
+            
+            # Use a different template for search results
+            return render(request, 'search_results.html', {
+                'selected_movie': selected_movie,  # The movie searched for
+                'movies': recommended_movies,      # Recommended movies
+                'selected_genres': movie_genres,   # Genres from the selected movie
+                'default_poster_url': default_poster_url
+            })
+        else:
+            # If no match found, go back to genre selection with an error
+            profile, created = UserProfile.objects.get_or_create(user=request.user)
+            form = GenreSelectionForm(instance=profile)
+            return render(request, 'select_genres.html', {
+                'form': form,
+                'error': 'Movie not found. Please try another title.'
+            })
+    
+    # If not POST request, redirect to genre selection page
+    return redirect('select_genres')
